@@ -4,8 +4,11 @@
 # Changes for this repo: branch main (not master); static site is prebuilt
 # (www/index.html), so `npm run build` is a no-op; Node 20 + Java 17 for
 # Capacitor 7; debug APK is always uploaded as an artifact (no secrets
-# needed); signed .aab + GitHub Release only run when the signing secrets
-# (RELEASE_KEYSTORE / RELEASE_KEYSTORE_PASSWORD / ACCESS_TOKEN) exist.
+# needed). Signed .aab + GitHub Release steps were REMOVED 2026-11-22:
+# GitHub's validator rejects `secrets` in step `if:` conditions, which made
+# the whole workflow file invalid (run #1 failed before starting). Re-add
+# the release steps when RELEASE_KEYSTORE / RELEASE_KEYSTORE_PASSWORD /
+# ACCESS_TOKEN are configured.
 name: Build Android
 
 run-name: Building Android APK from static site
@@ -59,31 +62,7 @@ jobs:
           name: app-debug
           path: android/app/build/outputs/apk/debug/app-debug.apk
 
-      - name: Build app bundle (only when signing secrets exist)
-        if: ${{ secrets.RELEASE_KEYSTORE != '' }}
-        run: cd android && ./gradlew bundleRelease
-
-      - name: Extract Android signing key from env
-        if: ${{ secrets.RELEASE_KEYSTORE != '' }}
-        run: |
-          echo "${{ secrets.RELEASE_KEYSTORE }}" > android/release.jks.base64
-          base64 -d android/release.jks.base64 > android/release.decrypted.jks
-
-      - name: Sign release bundle
-        if: ${{ secrets.RELEASE_KEYSTORE != '' && secrets.RELEASE_KEYSTORE_PASSWORD != '' }}
-        run: jarsigner -keystore android/release.decrypted.jks -storepass "${{ secrets.RELEASE_KEYSTORE_PASSWORD }}" -signedjar ./android/app/build/outputs/bundle/release/app-release-signed.aab ./android/app/build/outputs/bundle/release/app-release.aab release
-
-      - name: Set Tag
-        if: ${{ secrets.RELEASE_KEYSTORE != '' && secrets.ACCESS_TOKEN != '' }}
-        id: current-datetime
-        run: echo "CURRENT_DATETIME=$(date +'%Y-%m-%d-%H_%M_%S%z')" >> "$GITHUB_OUTPUT"
-
-      - name: Create Release with signed AAB + debug APK
-        if: ${{ secrets.RELEASE_KEYSTORE != '' && secrets.ACCESS_TOKEN != '' }}
-        run: |
-          gh release create "${{ steps.current-datetime.outputs.CURRENT_DATETIME }}" \
-            -t "${{ steps.current-datetime.outputs.CURRENT_DATETIME }}" \
-            ./android/app/build/outputs/bundle/release/app-release-signed.aab \
-            ./android/app/build/outputs/apk/debug/app-debug.apk
-        env:
-          GH_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+      # NOTE: signed .aab + GitHub Release steps were removed (2026-11-22).
+      # GitHub's validator rejects `secrets` in step `if:` conditions, so the
+      # whole workflow file was invalid and run #1 never started. Re-add the
+      # release steps when the signing secrets are configured.
