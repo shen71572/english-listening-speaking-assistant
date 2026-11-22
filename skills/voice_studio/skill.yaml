@@ -1,0 +1,5 @@
+name: "voice_studio"
+title: "VoiceStudio"
+description: "Open-source, fully-local ElevenLabs alternative: voice cloning from a 5-15s recording, voice design, video dubbing, dictation, transcription and audiobooks in 646 languages; runs on Windows, macOS, Linux, Docker and Android, CPU works too. Use it to give the English listening-speaking assistant prototype fixed cloned voices for NPCs and pre-generated human-feeling audio for listening passages and vocabulary."
+category: "Work and knowledge"
+include_in_prompt: true
