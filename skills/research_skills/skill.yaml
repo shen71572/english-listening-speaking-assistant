@@ -1,0 +1,5 @@
+name: "research_skills"
+title: "Research Skills"
+description: "Do academic research with the 8-repo research toolkit: full-pipeline research agent, topic and novelty judgement, cross-disciplinary analysis, figures, top-journal writing, and verifiable deep research — pick the right skill for each step of the paper pipeline."
+category: "Work and knowledge"
+include_in_prompt: true
