@@ -1,0 +1,5 @@
+name: "dynamic_design_studio"
+title: "Dynamic Design Studio"
+description: "Build professional motion design, 3D, animation and video work with the 20-repo dynamic design toolkit: pick the right library or skill for the animation, 3D scene, engine, audio or render step."
+category: "Work and knowledge"
+include_in_prompt: true
